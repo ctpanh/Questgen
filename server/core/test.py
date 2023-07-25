@@ -44,16 +44,17 @@ def summarize(article_path):
 
 def genQuest(input_txt):
     nlp = pipelines.pipeline("question-generation", model="valhalla/t5-base-qg-hl")
-    print(nlp(input_txt))
+    # print(nlp(input_txt))
     output = nlp(input_txt)
     return output
+
+def getQuest(file):
+    # article_path = "article.txt"
+    # summarized = summarize(file)
+    return genQuest("""A young girl named Lily was known for her kind heart and adventurous spirit . She had always dreamt of embarking on an exciting journey beyond the borders of her village . One day, while climbing a steep mountain, she came across a hidden cave and discovered a sparkling crystal . As she touched the crystal, a surge of energy coursed through her veins, granting her incredible powers . She became known as 
+the Guardian of Imagination .""")
 
 if __name__ == '__main__':
     article_path = "article.txt"
     summarized = summarize(article_path)
     result = genQuest(summarized)
-
-def getQuest(file):
-    # article_path = "article.txt"
-    summarized = summarize(file)
-    return genQuest(summarized)

@@ -21,4 +21,7 @@ from questgen import views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/getQuestFromFile", views.questionGenFromFile),
+    path("api/quests", views.get_all_questions),
+    path("api/ans", views.get_all_answers),
+    path("api/both", views.get_both),
 ]

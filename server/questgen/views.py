@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import FileModel
-from core.test import getQuest
+from core.gen_questions import getQuest
 import os
 import json
 
@@ -18,9 +18,9 @@ def questionGenFromFile(request):
     file_path = file_path.replace("\\", "/")
     # return Response({"path": file_path})
     response_data = getQuest(file_path)
-    with open(json_path, 'w') as json_file:
+    with open(json_path, 'w') as json_file: 
         json.dump(response_data, json_file)
-    return Response(response_data)
+    return Response({"success"})
 
 @api_view(['GET'])
 def get_all_questions(request):
@@ -40,6 +40,6 @@ def get_all_answers(request):
 def get_both(request):
     with open(json_path, 'r') as json_file:
         data = json.load(json_file)
-    qa_list = [{"question": item["question"], "answer": item["answer"]} for item in data]
+    qa_list = [{"question": item["question_statement"], "answer": item["answer"]} for item in data["questions"]]
 
     return Response(qa_list)

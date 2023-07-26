@@ -1,8 +1,6 @@
 from pprint import pprint
-from pprint import pprint
-import nltk
 # nltk.download('stopwords')
-from Questgen import main
+from core.Questgen import main
 
 def load_txt(txt_path):
     f = open(txt_path, "r", encoding="utf8")
@@ -35,9 +33,8 @@ def get_questions(context, max_ques=4, type='mcq'):
         output = qg.predict_mcq(payload)
     return output
 
-def run():
-    txt_path = 'txt_file/article.txt'
-    context = load_txt(txt_path)
+def getQuest(file_path):
+    context = load_txt(file_path)
     num_words = count_words(context)
     # print(num_words)
     outputs = []
@@ -48,5 +45,7 @@ def run():
     else:
         output = get_questions(context)
         
-    pprint (output)
-run()
+    # pprint (output)
+    return output
+
+# pprint(getQuest('core/article.txt'))

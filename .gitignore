@@ -1,6 +1,6 @@
+*/jsonsave/
 db.sqlite3
 __pycache__/
 store/
 .DS_Store
 s2v_old
-jsonsave/

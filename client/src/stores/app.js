@@ -2,7 +2,7 @@ import { ref } from "vue";
 import axios from "axios";
 import router from "../router";
 axios.defaults.baseURL = "http://localhost:8000/api";
-export default function useNotes() {
+export default function useApps() {
 
     const quests = ref([]);
     const errors = ref({});
@@ -11,7 +11,7 @@ export default function useNotes() {
         quests.value = response.data;
     };
 
-    const storeFile = async (data) => {
+    const genQuestFromFile = async (data) => {
         try {
             await axios.post("/getQuestFromFile", data, {
                 headers: {
@@ -24,9 +24,21 @@ export default function useNotes() {
         }
     };
 
+    const genQuestFromText = async (data) => {
+        try {
+            await axios.post("/getQuestFromText", data);
+            router.push({ name: "AppView" });
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    
+
     return {
         quests,
-        storeFile,
+        genQuestFromFile,
+        genQuestFromText,
         getQuests,
         errors
     };

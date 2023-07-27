@@ -33,10 +33,9 @@ def get_questions(context, max_ques=4, type='mcq'):
         output = qg.predict_mcq(payload)
     return output
 
-def getQuest(file_path):
+def getQuestFromFile(file_path):
     context = load_txt(file_path)
     num_words = count_words(context)
-    # print(num_words)
     outputs = []
     if num_words >= 3000:
         chunks = get_chunks(context)
@@ -45,7 +44,18 @@ def getQuest(file_path):
     else:
         output = get_questions(context)
         
-    # pprint (output)
+    return output
+
+def getQuestFromText(context):
+    num_words = count_words(context)
+    outputs = []
+    if num_words >= 3000:
+        chunks = get_chunks(context)
+        for chunk in chunks:
+            output = get_questions(chunk)
+    else:
+        output = get_questions(context)
+        
     return output
 
 # pprint(getQuest('core/article.txt'))

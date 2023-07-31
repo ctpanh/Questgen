@@ -25,4 +25,5 @@ urlpatterns = [
     path("api/quests", views.get_all_questions),
     path("api/ans", views.get_all_answers),
     path("api/both", views.get_both),
+    path("test", views.questionGenFromFileTest)
 ]

@@ -1,14 +1,22 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import FileModel
+from .serializers import FileSerializer, TextSerializer
 from core.gen_questions import getQuestFromFile, getQuestFromText
 import os
 import json
+from drf_spectacular.utils import extend_schema
 
 
 # Create your views here.
 
 json_path = "jsonsave/tmp.json"
+
+@extend_schema(
+        request=FileSerializer,
+        responses={204: None},
+        methods=["POST"]
+    )
 
 @api_view(['POST'])
 def questionGenFromFile(request):
@@ -22,26 +30,17 @@ def questionGenFromFile(request):
         json.dump(response_data, json_file)
     return Response({"success"})
 
+@extend_schema(
+        request=TextSerializer,
+        responses={204: None},
+        methods=["POST"]
+    )
 @api_view(['POST'])
 def questionGenFromText(request):
     response_data = getQuestFromText(request.data["text"])
     with open(json_path, 'w') as json_file: 
         json.dump(response_data, json_file)
     return Response({"success"})
-
-@api_view(['GET'])
-def get_all_questions(request):
-    with open(json_path, 'r') as json_file:
-        data = json.load(json_file)
-    questions = [item["question"] for item in data]
-    return Response({"questions": questions})
-
-@api_view(['GET'])
-def get_all_answers(request):
-    with open(json_path, 'r') as json_file:
-        data = json.load(json_file)
-    answers = [item["answer"] for item in data]
-    return Response({"answers": answers})
 
 @api_view(['GET'])
 def get_both(request):

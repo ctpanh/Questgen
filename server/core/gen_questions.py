@@ -1,6 +1,6 @@
 from pprint import pprint
 # nltk.download('stopwords')
-from Questgen import main
+from core.Questgen import main
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 def load_txt(txt_path):

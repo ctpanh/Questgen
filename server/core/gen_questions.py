@@ -78,9 +78,9 @@ def getQuestFromText(context):
 
 # pprint(getQuest('core/article.txt'))
 
-context = load_txt(r"C:\Users\User\Desktop\New folder\Questgen\server\core\article.txt")
+# context = load_txt(r"C:\Users\User\Desktop\New folder\Questgen\server\core\article.txt")
 # print("CHUNK1: ")
-print(get_chunks_2(context=context, length=500, overlap=50)[0].page_content)
+# print(get_chunks_2(context=context, length=500, overlap=50)[0].page_content)
 
 # print("CHUNK2:")
 # print(get_chunks(context=context, max_length=500, overlap=50)[0])

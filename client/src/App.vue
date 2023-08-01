@@ -31,9 +31,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
     <!-- buttons --->
     <div class="w-3/12 flex justify-end">
-      <a href="">
-        Account
-      </a>
+      <RouterLink to="/">Account</RouterLink>
     </div>
   </header>
   <RouterView />

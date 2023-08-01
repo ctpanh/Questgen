@@ -17,12 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from questgen import views
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/getQuestFromFile", views.questionGenFromFile),
     path("api/getQuestFromText", views.questionGenFromText),
-    path("api/quests", views.get_all_questions),
-    path("api/ans", views.get_all_answers),
-    path("api/both", views.get_both),
+    path("api/both", views.get_both, name="questions"),
+    # swagger
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 ]

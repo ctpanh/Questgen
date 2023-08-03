@@ -4,3 +4,4 @@ __pycache__/
 store/
 .DS_Store
 s2v_old
+.env

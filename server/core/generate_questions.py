@@ -9,7 +9,7 @@ from langchain.prompts.chat import (
     AIMessagePromptTemplate,
     HumanMessagePromptTemplate,
 )
-from server.core.prompt import tfq_template, mcq_template, fill_in_blank_template 
+from prompt import tfq_template, mcq_template, fill_in_blank_template 
 from langchain.schema import AIMessage, HumanMessage, SystemMessage
 import re
 
@@ -56,6 +56,7 @@ def extract_tfq(question_list):
     return questions['easy'], questions['medium'], questions['hard']
 
 def extract_mcq(question_list):
+    print(question_list)
     questions = {
         'easy': [],
         'medium': [],
@@ -65,31 +66,29 @@ def extract_mcq(question_list):
     current_question = None
 
     for item in question_list:
-        if (item.find("Easy question") != -1):
+        if "Easy question" in item:
             current_difficulty = 'easy'
-            # print("go here")
-            # current_question = {}
-        elif (item.find("Medium question") != -1):
+        elif "Medium question" in item:
             current_difficulty = 'medium'
-            # current_question = {}
-        elif (item.find("Difficult question") != -1):
+        elif "Difficult question" in item:
             current_difficulty = 'hard'
-            # current_question = {}
-        elif current_difficulty:
-            # print(item.split(': ', 1))
+        elif current_difficulty and ': ' in item:
             key, value = item.split(': ', 1)
-            if (key.find("Question") != -1):
+            if key == 'Question':
                 current_question = {}
                 current_question['question'] = value
-                current_question['options'] = []  # Initialize 'option' as an empty list
+                current_question['options'] = []  # Initialize 'options' as an empty list
                 current_question['true option'] = []  # Initialize 'true option' as an empty list
-            elif (key.find("Option") != -1): 
+            elif key.startswith('Option'):
                 current_question['options'].append(value)
-            elif (key.find("True option") != -1):
+            elif key == 'True option':
                 current_question['true option'].append(value)
                 questions[current_difficulty].append(current_question)
-            else:
-                continue
+
+    # Remove empty lists for 0 questions
+    questions['easy'] = [q for q in questions['easy'] if q['question']]
+    questions['medium'] = [q for q in questions['medium'] if q['question']]
+    questions['hard'] = [q for q in questions['hard'] if q['question']]
 
     return questions['easy'], questions['medium'], questions['hard']
 
@@ -149,8 +148,8 @@ Male dominance is exhibited by the royal family when they hold a royal ball, req
 Cinderella is a folktale that speaks of oppression and yields that are triumphant. Women, who are usually belittled by society, are seen to have transformative gains since they end up in powerful positions, in this case, a princess. Cinderella has been described in terms of numerous setups, but the first and most outstanding variant is that of Rhodopids retrieved by a geographer from Greece known as Strabo between 7Bc and AD23. The story demonstrates how a Greek slave gets married to an Egyptian king. However, it is necessary to note that Disney based its report on a tale written by Charles Perrault, whose story revolves around a girl with a cruel stepmother and evil stepsisters force to serve them.
  """
 
-# easy, medium, hard = get_questions(context=context, type="boolean", easy=3, med=4, hard=2)
-# print(easy)
+easy, medium, hard = get_questions(context=context, type="boolean", easy=0, med=0, hard=0)
+print(easy)
 # print(medium)
 # print(hard)
 # tf = contains_character("1. true option ne ne", "true option")

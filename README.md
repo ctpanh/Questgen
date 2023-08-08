@@ -15,14 +15,14 @@ Questgen creates questions and answers based on your document.
 ✅ Medium <br>
 ✅ Hard <br>
 
-## 📌  Demo
-** True/False question **
+## 🎬  Demo
+**True/False question**
 - Easy
 - Medium
 - Hard
   
-** Multiple choice question **
-- Easy:
+**Multiple choice question**
+- Easy: <br>
   Question: What is Object Oriented Programming? <br>
   Options: <br>
     A programming pattern where programs are structured around objects <br>
@@ -40,7 +40,7 @@ Questgen creates questions and answers based on your document.
   True option: All of the above <br>
 - Hard: <br>
   
-** Fill in blank question ** 
+**Fill in blank question** 
 - Easy <br>
   Question: OOPs stands for Object Oriented __________ C++. <br>
   Options: <br>
@@ -57,7 +57,7 @@ Questgen creates questions and answers based on your document.
       c) irrelevant
       d) essential
   True option: a) complex <br>
-- Hard:
+- Hard: <br>
   Question: Inheritance establishes a __________ relationship among classes, reflecting real-world or conceptual hierarchies. <br>
   Options': <br>
       a) hierarchical
@@ -81,12 +81,12 @@ pip install -r requirements.txt
 ```
 
 
-## Main Technologies
+## 🌐  Main Technologies
 - Frontend:
 - Backend:
 - AI: OpenAI
 
-## Project Structure
+## 📎  Project Structure
 
 The directory structure of new project looks like this:
 

@@ -1,4 +1,4 @@
-# Lightning-Hydra-Template
+# Questgen
 
 ## 📌  Introduction
 Questgen creates questions and answers based on your document.

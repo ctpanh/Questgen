@@ -10,5 +10,6 @@ class FileModel(models.Model):
     easy = models.IntegerField(default=1)
     medium = models.IntegerField(default=1)
     hard = models.IntegerField(default=1)
+    type = models.IntegerField(default=0)
     def __str__(self):
         return self.file.name

@@ -36,10 +36,17 @@ def questionGenFromFile(request):
     easy_num = int(request.data["easy"])
     med_num = int(request.data["medium"])
     hard_num = int(request.data["hard"])
-    # easy_num = 2
-    # med_num = 2
-    # hard_num = 2
-    easy_questions, medium_questions, hard_questions = get_questions(context, "boolean", easy_num, med_num, hard_num)
+    type_input = int(request.data["type"])
+    
+    type = ""
+    if type_input == 0:
+        type = "boolean"
+    elif type_input == 1:
+        type = "multiple choice"
+    else:
+        type = "fill in blank"
+
+    easy_questions, medium_questions, hard_questions = get_questions(context, type, easy_num, med_num, hard_num)
     
     response_data = {
         "easy": easy_questions,
@@ -64,8 +71,17 @@ def questionGenFromText(request):
     med_num = int(request.data["medium"])
     hard_num = int(request.data["hard"])
     context = request.data["text"]
+    type_input = int(request.data["type"])
+    
+    type = ""
+    if type_input == 0:
+        type = "boolean"
+    elif type_input == 1:
+        type = "multiple choice"
+    else:
+        type = "fill in blank"
 
-    easy_questions, medium_questions, hard_questions = get_questions(context, "boolean", easy_num, med_num, hard_num)
+    easy_questions, medium_questions, hard_questions = get_questions(context, type, easy_num, med_num, hard_num)
     
     response_data = {
         "easy": easy_questions,

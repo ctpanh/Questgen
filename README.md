@@ -4,64 +4,67 @@
 Questgen creates questions and answers based on your document.
 
 **Type of questions:**
+
 ✅ True/False question <br>
 ✅ Multiple choice question <br>
 ✅ Fill in blank question <br>
 
 **Level of questions:**
+
 ✅ Easy <br>
 ✅ Medium <br>
 ✅ Hard <br>
 
 ## 📌  Demo
-** True/False question
+** True/False question **
 - Easy
 - Medium
 - Hard
-** Multiple choice question
-- Easy:
-  Question: What is Object Oriented Programming?
-  Options:
-    A programming pattern where programs are structured around objects
-    A programming pattern where programs are structured around functions
-    A programming pattern where programs are structured around logic
-    A programming pattern where programs are structured around data
-  True option: A programming pattern where programs are structured around objects
-- Medium:
-  Question: What does Abstraction help in?
-  Options:
-    Data hiding process
-    Displaying essential features without showing details
-    Avoiding unnecessary information or irrelevant details
-    All of the above
-  True option: All of the above
-- Hard:
   
-** Fill in blank question
-- Easy
-  Question: OOPs stands for Object Oriented __________ C++., 
-  Options:
-      a) Programming
-      b) Polymorphism
-      c) Inheritance
-      d) Abstraction 
-  True option: a) Programming
-- Medium:
-  Question: Abstraction allows hiding __________ implementation details and exposing a simplified interface to the user.
-  Options:
+** Multiple choice question **
+- Easy:
+  Question: What is Object Oriented Programming? <br>
+  Options: <br>
+    A programming pattern where programs are structured around objects <br>
+    A programming pattern where programs are structured around functions <br>
+    A programming pattern where programs are structured around logic <br>
+    A programming pattern where programs are structured around data <br>
+  True option: A programming pattern where programs are structured around objects <br>
+- Medium: <br> 
+  Question: What does Abstraction help in? <br>
+  Options: <br>
+    Data hiding process <br>
+    Displaying essential features without showing details <br>
+    Avoiding unnecessary information or irrelevant details <br>
+    All of the above <br>
+  True option: All of the above <br>
+- Hard: <br>
+  
+** Fill in blank question ** 
+- Easy <br>
+  Question: OOPs stands for Object Oriented __________ C++. <br>
+  Options: <br>
+      a) Programming <br>
+      b) Polymorphism <br>
+      c) Inheritance <br>
+      d) Abstraction <br>
+  True option: a) Programming <br>
+- Medium: <br>
+  Question: Abstraction allows hiding __________ implementation details and exposing a simplified interface to the user. <br>
+  Options: <br>
       a) complex
       b) unnecessary
       c) irrelevant
       d) essential
-  True option: a) complex
+  True option: a) complex <br>
 - Hard:
-  Question: Inheritance establishes a __________ relationship among classes, reflecting real-world or conceptual hierarchies.
-  Options':
+  Question: Inheritance establishes a __________ relationship among classes, reflecting real-world or conceptual hierarchies. <br>
+  Options': <br>
       a) hierarchical
       b) polymorphic
       c) encapsulated
       d) abstract
-  True option: a) hierarchical
+  True option: a) hierarchical <br>
 
 ## 🚀  Quickstart
 ```bash

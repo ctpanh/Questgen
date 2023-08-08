@@ -7,5 +7,8 @@ class FileModel(models.Model):
     # types = models.IntegerField(default=0)
     file = models.FileField(blank=True, null=True, upload_to="store")
     text = models.TextField(default="")
+    easy = models.IntegerField(default=1)
+    medium = models.IntegerField(default=1)
+    hard = models.IntegerField(default=1)
     def __str__(self):
         return self.file.name

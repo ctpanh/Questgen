@@ -4,9 +4,9 @@ from .models import FileModel
 class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = FileModel
-        fields = ('id', 'file')
+        fields = ('id', 'file', 'easy', 'medium', 'hard')
 
 class TextSerializer(serializers.ModelSerializer):
     class Meta:
         model = FileModel
-        fields = ('id', 'text')
+        fields = ('id', 'text', 'easy', 'medium', 'hard')

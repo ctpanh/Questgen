@@ -1,7 +1,7 @@
 #main
 import os
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts.chat import (
     ChatPromptTemplate,
@@ -93,7 +93,7 @@ def extract_mcq(question_list):
     return questions['easy'], questions['medium'], questions['hard']
 
 def generate_questions(context, type, easy_num, med_num, hard_num):
-    chat = ChatOpenAI(temperature=0, openai_api_key=os.getenv('OPENAI_API_KEY'))
+    chat = ChatOpenAI(temperature=0, openai_api_key="")
     
     template = ""
     if type == "boolean":
@@ -148,8 +148,8 @@ Male dominance is exhibited by the royal family when they hold a royal ball, req
 Cinderella is a folktale that speaks of oppression and yields that are triumphant. Women, who are usually belittled by society, are seen to have transformative gains since they end up in powerful positions, in this case, a princess. Cinderella has been described in terms of numerous setups, but the first and most outstanding variant is that of Rhodopids retrieved by a geographer from Greece known as Strabo between 7Bc and AD23. The story demonstrates how a Greek slave gets married to an Egyptian king. However, it is necessary to note that Disney based its report on a tale written by Charles Perrault, whose story revolves around a girl with a cruel stepmother and evil stepsisters force to serve them.
  """
 
-easy, medium, hard = get_questions(context=context, type="boolean", easy=0, med=0, hard=0)
-print(easy)
+# easy, medium, hard = get_questions(context=context, type="boolean", easy=0, med=0, hard=0)
+# print(easy)
 # print(medium)
 # print(hard)
 # tf = contains_character("1. true option ne ne", "true option")

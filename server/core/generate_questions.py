@@ -9,7 +9,7 @@ from langchain.prompts.chat import (
     AIMessagePromptTemplate,
     HumanMessagePromptTemplate,
 )
-from prompt import tfq_template, mcq_template, fill_in_blank_template 
+from core.prompt import tfq_template, mcq_template, fill_in_blank_template 
 from langchain.schema import AIMessage, HumanMessage, SystemMessage
 import re
 

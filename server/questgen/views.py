@@ -3,32 +3,19 @@ from rest_framework.response import Response
 from .models import FileModel
 from .serializers import FileSerializer, TextSerializer
 from core.generate_questions import generate_questions, get_questions, load_txt
-import os
 import json
 from drf_spectacular.utils import extend_schema
 
 
 # Create your views here.
 
-json_path = "jsonsave/tmp.json"
+json_path = "output_questions.json"
 
 @extend_schema(
         request=FileSerializer,
         responses={204: None},
         methods=["POST"]
     )
-
-# @api_view(['POST'])
-# def questionGenFromFile2(request):
-#     file = request.FILES["file"]
-#     form = FileModel.objects.create(file=file)
-#     file_path = form.file.path
-#     file_path = file_path.replace("\\", "/")
-#     # return Response({"path": file_path})
-#     response_data = getQuestFromFile(file_path)
-#     with open(json_path, 'w') as json_file: 
-#         json.dump(response_data, json_file)
-#     return Response({"success"})
 
 @api_view(['POST'])
 def questionGenFromFile(request):
@@ -73,15 +60,27 @@ def questionGenFromFile(request):
     )
 @api_view(['POST'])
 def questionGenFromText(request):
-    response_data = getQuestFromText(request.data["text"])
-    with open(json_path, 'w') as json_file: 
+    easy_num = int(request.data["easy"])
+    med_num = int(request.data["medium"])
+    hard_num = int(request.data["hard"])
+    context = request.data["text"]
+
+    easy_questions, medium_questions, hard_questions = get_questions(context, "boolean", easy_num, med_num, hard_num)
+    
+    response_data = {
+        "easy": easy_questions,
+        "medium": medium_questions,
+        "hard": hard_questions
+    }
+    
+    json_path = "output_questions.json"
+    with open(json_path, 'w') as json_file:
         json.dump(response_data, json_file)
-    return Response({"success"})
+    
+    return Response({"success": "Questions generated and saved as JSON."})
 
 @api_view(['GET'])
 def get_both(request):
     with open(json_path, 'r') as json_file:
         data = json.load(json_file)
-    qa_list = [{"question": item["question_statement"], "answer": item["answer"]} for item in data["questions"]]
-
-    return Response(qa_list)
+    return Response(data)

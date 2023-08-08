@@ -4,14 +4,14 @@
 Questgen creates questions and answers based on your document.
 
 **Type of questions:**
-✅ True/False question
-✅ Multiple choice question
-✅ Fill in blank question
+✅ True/False question <br>
+✅ Multiple choice question <br>
+✅ Fill in blank question <br>
 
 **Level of questions:**
-✅ Easy
-✅ Medium
-✅ Hard
+✅ Easy <br>
+✅ Medium <br>
+✅ Hard <br>
 
 ## 📌  Demo
 ** True/False question

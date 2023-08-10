@@ -1,9 +1,8 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import FileModel
+from .models import QuestionModel
 from .serializers import FileSerializer, TextSerializer
-from core.generate_questions import generate_questions, get_questions, load_txt
-import json
+from core.generate_questions import get_questions, load_txt
 from drf_spectacular.utils import extend_schema
 
 
@@ -19,34 +18,23 @@ json_path = "output_questions.json"
 
 @api_view(['POST'])
 def questionGenFromFile(request):
-    # Get the uploaded file from the request
     file = request.FILES.get("file")
+    easy_num = int(request.data["easy"])
+    med_num = int(request.data["medium"])
+    hard_num = int(request.data["hard"])
+    type_input = request.data["type"]
     
     if not file:
         return Response({"error": "No file uploaded."}, status=400)
     
     # Create a model instance to store the file (assuming you have a model named 'FileModel')
-    form = FileModel.objects.create(file=file)
-    file_path = form.file.path.replace("\\", "/")
-    
+    form = QuestionModel.objects.create(file=file, easy=easy_num, medium=med_num, hard=hard_num, quest_type=type_input)
     # Get the context from the uploaded file
+    file_path = form.file.path.replace("\\", "/")
     context = load_txt(file_path)
     
     # Generate the questions using the 'get_questions' function
-    easy_num = int(request.data["easy"])
-    med_num = int(request.data["medium"])
-    hard_num = int(request.data["hard"])
-    type_input = int(request.data["type"])
-    
-    type = ""
-    if type_input == 0:
-        type = "boolean"
-    elif type_input == 1:
-        type = "multiple choice"
-    else:
-        type = "fill in blank"
-
-    easy_questions, medium_questions, hard_questions = get_questions(context, type, easy_num, med_num, hard_num)
+    easy_questions, medium_questions, hard_questions = get_questions(context, type_input, easy_num, med_num, hard_num)
     
     response_data = {
         "easy": easy_questions,
@@ -54,11 +42,7 @@ def questionGenFromFile(request):
         "hard": hard_questions
     }
     
-    json_path = "output_questions.json"
-    with open(json_path, 'w') as json_file:
-        json.dump(response_data, json_file)
-    
-    return Response({"success": "Questions generated and saved as JSON."})
+    return Response(response_data)
 
 @extend_schema(
         request=TextSerializer,
@@ -67,21 +51,13 @@ def questionGenFromFile(request):
     )
 @api_view(['POST'])
 def questionGenFromText(request):
+    context = request.data["text"]
     easy_num = int(request.data["easy"])
     med_num = int(request.data["medium"])
     hard_num = int(request.data["hard"])
-    context = request.data["text"]
-    type_input = int(request.data["type"])
-    
-    type = ""
-    if type_input == 0:
-        type = "boolean"
-    elif type_input == 1:
-        type = "multiple choice"
-    else:
-        type = "fill in blank"
+    type_input = request.data["type"]
 
-    easy_questions, medium_questions, hard_questions = get_questions(context, type, easy_num, med_num, hard_num)
+    easy_questions, medium_questions, hard_questions = get_questions(context, type_input, easy_num, med_num, hard_num)
     
     response_data = {
         "easy": easy_questions,
@@ -89,14 +65,4 @@ def questionGenFromText(request):
         "hard": hard_questions
     }
     
-    json_path = "output_questions.json"
-    with open(json_path, 'w') as json_file:
-        json.dump(response_data, json_file)
-    
-    return Response({"success": "Questions generated and saved as JSON."})
-
-@api_view(['GET'])
-def get_both(request):
-    with open(json_path, 'r') as json_file:
-        data = json.load(json_file)
-    return Response(data)
+    return Response(response_data)

@@ -83,7 +83,7 @@ pip install -r requirements.txt
 cd server
 python manage.py migrate
 python manage.py runserver
-
+```
 ## 🌐  Main Technologies
 - Frontend: VueJS
 - Backend: Django

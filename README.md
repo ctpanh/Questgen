@@ -78,12 +78,15 @@ conda activate myenv
 
 # install requirements
 pip install -r requirements.txt
-```
 
+# Run backend
+cd server
+python manage.py migrate
+python manage.py runserver
 
 ## 🌐  Main Technologies
-- Frontend:
-- Backend:
+- Frontend: VueJS
+- Backend: Django
 - AI: OpenAI
 
 ## 📎  Project Structure

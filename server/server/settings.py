@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     "questgen.apps.QuestgenConfig",
     "corsheaders",
     "drf_spectacular",
-    "drf_spectacular_sidecar",
 ]
 
 MIDDLEWARE = [

@@ -30,7 +30,7 @@ def get_chunks_2(context, length, overlap):
     return text_splitter.create_documents([context])
 
 
-def getQuestFromText(context, type, easy, med, hard):
+def getQuestFromText(language, context, type, easy, med, hard):
     num_words = count_words(context)
     outputs = []
     easy_ques = []
@@ -40,17 +40,17 @@ def getQuestFromText(context, type, easy, med, hard):
         print("more than 3000 words")
         chunks = get_chunks(context)
         for chunk in chunks:
-            easy_q, med_q, diff_q = get_questions(chunk, type, easy=easy, med=med, hard=hard)
+            easy_q, med_q, diff_q = get_questions(language=language, context=chunk, type=type, easy=easy, med=med, hard=hard)
             easy_ques.append(easy_q)
             med_ques.append(med_q)
             diff_ques.append(diff_q)
     else:
         print("less than 3000 words")
-        easy_ques, med_ques, diff_ques = get_questions(context, type, easy=easy, med=med, hard=hard)
+        easy_ques, med_ques, diff_ques = get_questions(language=language, context=context, type=type, easy=easy, med=med, hard=hard)
     return easy_ques, med_ques, diff_ques
 
 context = load_txt('server/core/article.txt')
-easy, med, diff = getQuestFromText(context, 'fill in blank', 8, 8, 9)
+easy, med, diff = getQuestFromText("Vietnamese", context, 'boolean', 3, 3, 3)
 print(easy)
-print(med)
-print(diff)
+# print(med)
+# print(diff)

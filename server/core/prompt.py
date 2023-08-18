@@ -1,11 +1,11 @@
 tfq_template = (
-    """Create true or false questions and their answers and their explanations with {easy_num} easy questions, {med_num} medium questions, {hard_num} difficult questions to help users learn about the following context: {context}.
+    """Create true or false statements and their answers and their explanations (all statements, answers and explanations are in {language}) with {easy_num} easy questions, {med_num} medium questions, {hard_num} difficult questions to help users learn about the following context: {context}.
+    Translate all statements, answers and explantions into {language}
     Please give the response strictly follow below format and don't add or change character/word.
-    
     ###
     Desired format:
     Easy question: 
-    statement: -||-
+    statement: -||- 
     answer: -||-
     explanation: -||-
     (all the easy question)

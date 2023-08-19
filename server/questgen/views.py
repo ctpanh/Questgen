@@ -22,7 +22,7 @@ def questionGenFromFile(request):
     easy_num = int(request.data["easy"])
     med_num = int(request.data["medium"])
     hard_num = int(request.data["hard"])
-    type_input = request.data["type"]
+    type_input = request.data["quest_type"]
     
     if not file:
         return Response({"error": "No file uploaded."}, status=400)
@@ -55,7 +55,7 @@ def questionGenFromText(request):
     easy_num = int(request.data["easy"])
     med_num = int(request.data["medium"])
     hard_num = int(request.data["hard"])
-    type_input = request.data["type"]
+    type_input = request.data["quest_type"]
 
     easy_questions, medium_questions, hard_questions = get_questions(context, type_input, easy_num, med_num, hard_num)
     

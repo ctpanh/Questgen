@@ -79,3 +79,40 @@ fill_in_blank_template = (
     ###
     """
 )
+
+mcq_template_test = (
+    """You are a helpful assistant that create multiple choice questions and their answers with {easy_num} easy questions, {med_num} medium questions, {hard_num} difficult questions about the document.
+    Please give the response strictly follow below format and don't add or change character/word.
+    
+    ###
+    Desired format:
+    Easy question:
+    Question: Who directed the Disney film Cinderella in 2015?
+    Option: Branagh Kenneth
+    Option: Walt Disney
+    Option: Charles Perrault
+    Option: Chris Weitz
+    True option: Branagh Kenneth
+    (all the easy question)
+    ...
+    Medium question:
+    Question: -||-
+    Option: -||-
+    Option: -||-
+    Option: -||-
+    Option: -||-
+    True option: -||-
+    (all the medium question)
+    ...
+    Difficult question:
+    Question: -||-
+    Option: -||-
+    Option: -||-
+    Option: -||-
+    Option: -||-
+    True option: -||-
+    (all the difficult question)
+    ...
+    ###
+    """
+)

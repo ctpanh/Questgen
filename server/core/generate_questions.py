@@ -5,13 +5,9 @@ import os
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts.chat import (
     ChatPromptTemplate,
-    SystemMessagePromptTemplate,
-    AIMessagePromptTemplate,
     HumanMessagePromptTemplate,
 )
-from core.prompt import tfq_template, mcq_template, fill_in_blank_template 
-from langchain.schema import AIMessage, HumanMessage, SystemMessage
-import re
+from prompt import tfq_template, mcq_template, fill_in_blank_template 
 
 def contains_character(input_string, character):
     return input_string.find(character) != -1

@@ -47,43 +47,33 @@ def extract_tfq(question_list):
     return questions['easy'], questions['medium'], questions['hard']
 
 def extract_mcq(question_list):
-    print(question_list)
-    questions = {
-        'easy': [],
-        'medium': [],
-        'hard': []
-    }
-    current_difficulty = None
-    current_question = None
+    questions = []
 
-    for item in question_list:
+    current_question = {}
+
+    for item in question_list.split('\n'):
         if "Easy question" in item:
-            current_difficulty = 'easy'
+            current_question['difficulty'] = 'easy'
         elif "Medium question" in item:
-            current_difficulty = 'medium'
+            current_question['difficulty'] = 'medium'
         elif "Difficult question" in item:
-            current_difficulty = 'hard'
-        elif current_difficulty and ': ' in item:
+            current_question['difficulty'] = 'hard'
+        elif ': ' in item:
             key, value = item.split(': ', 1)
             if key == 'Question':
-                current_question = {}
                 current_question['question'] = value
-                current_question['options'] = [] 
-                current_question['true option'] = []  
+                current_question['options'] = []
+                current_question['true option'] = []
             elif key.startswith('Option'):
                 current_question['options'].append(value)
             elif key == 'True option':
                 current_question['true option'].append(value)
-                questions[current_difficulty].append(current_question)
 
-    # Remove empty lists for 0 questions
-    questions['easy'] = [q for q in questions['easy'] if q['question']]
-    questions['medium'] = [q for q in questions['medium'] if q['question']]
-    questions['hard'] = [q for q in questions['hard'] if q['question']]
+                # When we have collected all information for the current question, add it to the list
+                questions.append(current_question)
+                current_question = {}
 
-    return questions['easy'], questions['medium'], questions['hard']
-
-
+    return questions
 def delete_file():
     import shutil
     chroma_dir = 'server\core\chroma'
@@ -95,7 +85,7 @@ def delete_file():
             dir_path = os.path.join(root, dir_name)
             shutil.rmtree(dir_path)
 
-def load_file(path = r'C:\Users\User\Desktop\WebAI\Questgen3\Questgen\server\core\cinderella.txt'):
+def load_file(path = r'C:\Users\User\Desktop\WebAI\Questgen\server\core\cinderella.txt'):
     #delete file
     delete_file()
     #load file
@@ -138,27 +128,14 @@ def genquests(type, e, m, h):
     from langchain.chains import RetrievalQA
     qa_chain = RetrievalQA.from_chain_type(
         llm,
-        retriever=vectordb.as_retriever()
+        retriever=vectordb.as_retriever(search_kwargs={"k": 1})
     )
     result = qa_chain({"query": question})
-    print(result["result"])
+    # print(result["result"])
     return result["result"]
 
-def get_questions(type, easy, med, hard):
-    output = genquests(type=type, e=easy, m=med, h=hard)
-    questions_list = output.to_json()['kwargs']['content']
-    questions_list = questions_list.split("\n")
-    questions_list = [item for item in questions_list if item != ""]
-    easy_q = []
-    medium_q = []
-    hard_q = []
-    if type == "boolean":
-        easy_q, medium_q, hard_q = extract_tfq(questions_list)
-    else:
-        easy_q, medium_q, hard_q = extract_mcq(questions_list)
-    return easy_q, medium_q, hard_q
-
+load_file()
 str = genquests("multiple choice", 1, 1, 1)
-
-a, b, c = get_questions("multiple choice", 1,1,1)
+# print(str)
+a = extract_mcq(str)
 print(a)

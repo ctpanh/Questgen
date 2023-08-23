@@ -1,18 +1,10 @@
-# from core.Questgen import main
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.schema import AIMessage, HumanMessage, SystemMessage
+
 import os
 import openai
 import sys
 import sys
 from langchain.vectorstores import Chroma
 from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.prompts.chat import (
-    ChatPromptTemplate,
-    SystemMessagePromptTemplate,
-    AIMessagePromptTemplate,
-    HumanMessagePromptTemplate,
-)
 
 from langchain.chat_models import ChatOpenAI
 from dotenv import load_dotenv, find_dotenv
@@ -21,52 +13,76 @@ _ = load_dotenv(find_dotenv()) # read local .env file
 
 openai.api_key  = os.environ['OPENAI_API_KEY'] 
 
-from generate_questions import get_questions, generate_questions
+def extract_tfq(question_list):
+    questions = {
+        'easy': [],
+        'medium': [],
+        'hard': []
+    }
+    current_difficulty = None
+    current_question = None
 
-def load_txt(txt_path):
-    f = open(txt_path, "r", encoding="utf8")
-    context = f.read()
-    return context
+    for item in question_list:
+        if (item.find("Easy question") != -1):
+            current_difficulty = 'easy'
+        elif (item.find("Medium question") != -1):
+            current_difficulty = 'medium'
+        elif (item.find("Difficult question") != -1):
+            current_difficulty = 'hard'
+        elif current_difficulty:
+            key, value = item.split(': ', 1)
+            if key.find('Statement') != -1:
+                current_question = {}
+                current_question['question'] = value
+                current_question['answer'] = []  # Initialize 'option' as an empty list
+                current_question['explanation'] = []  # Initialize 'true option' as an empty list
+            elif key.find('Answer') != -1:
+                current_question['answer'] = value
+            elif key.find('Explanation') != -1:
+                current_question['explanation'] = value
+                questions[current_difficulty].append(current_question)
+            else:
+                continue
 
-def count_words(context):
-    words = context.split()
-    num_words = len(words)
-    return num_words
+    return questions['easy'], questions['medium'], questions['hard']
 
-def get_chunks(context, max_length=500, overlap=50):
+def extract_mcq(question_list):
+    print(question_list)
+    questions = {
+        'easy': [],
+        'medium': [],
+        'hard': []
+    }
+    current_difficulty = None
+    current_question = None
 
-    # chunks = [context[i:i+max_length] for i in range(0, len(context), max_length)]
-    chunks = [context[i:i+max_length] for i in range(0, len(context), max_length - overlap)]
-    return chunks
+    for item in question_list:
+        if "Easy question" in item:
+            current_difficulty = 'easy'
+        elif "Medium question" in item:
+            current_difficulty = 'medium'
+        elif "Difficult question" in item:
+            current_difficulty = 'hard'
+        elif current_difficulty and ': ' in item:
+            key, value = item.split(': ', 1)
+            if key == 'Question':
+                current_question = {}
+                current_question['question'] = value
+                current_question['options'] = [] 
+                current_question['true option'] = []  
+            elif key.startswith('Option'):
+                current_question['options'].append(value)
+            elif key == 'True option':
+                current_question['true option'].append(value)
+                questions[current_difficulty].append(current_question)
 
-def get_chunks_2(context, length, overlap):
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size = length,
-        chunk_overlap = overlap,
-        length_function = len,
-        add_start_index = True
-    )
-    return text_splitter.create_documents([context])
+    # Remove empty lists for 0 questions
+    questions['easy'] = [q for q in questions['easy'] if q['question']]
+    questions['medium'] = [q for q in questions['medium'] if q['question']]
+    questions['hard'] = [q for q in questions['hard'] if q['question']]
 
+    return questions['easy'], questions['medium'], questions['hard']
 
-def getQuestFromText(context, type, easy, med, hard):
-    num_words = count_words(context)
-    outputs = []
-    easy_ques = []
-    med_ques = []
-    diff_ques = []
-    if num_words >= 3000:
-        print("more than 3000 words")
-        chunks = get_chunks(context)
-        for chunk in chunks:
-            easy_q, med_q, diff_q = get_questions(chunk, type, easy=easy, med=med, hard=hard)
-            easy_ques.append(easy_q)
-            med_ques.append(med_q)
-            diff_ques.append(diff_q)
-    else:
-        print("less than 3000 words")
-        easy_ques, med_ques, diff_ques = get_questions(context, type, easy=easy, med=med, hard=hard)
-    return easy_ques, med_ques, diff_ques
 
 def delete_file():
     import shutil
@@ -98,8 +114,15 @@ def load_file(path = r'C:\Users\User\Desktop\WebAI\Questgen3\Questgen\server\cor
     vectordb.add_documents(documents=doc)
 
 from prompt import *
-def ask_and_answer(question= "generate 5 questions about polymorphysm"):
-    question = mcq_template_test.format(easy_num=1, med_num=1,hard_num=1)
+def genquests(type, e, m, h):
+    template = ""
+    if type == "boolean":
+        template = tfq_template
+    if type == "multiple choice":
+        template = mcq_template
+    if type == "fill in blank":
+        template = fill_in_blank_template
+    question = template.format(easy_num=e, med_num=m,hard_num=h)
     import datetime
     current_date = datetime.datetime.now().date()
     if current_date < datetime.date(2023, 9, 2):
@@ -119,11 +142,23 @@ def ask_and_answer(question= "generate 5 questions about polymorphysm"):
     )
     result = qa_chain({"query": question})
     print(result["result"])
+    return result["result"]
 
-load_file()
-ask_and_answer()
-# context = load_txt('server/core/article.txt')
-# easy, med, diff = getQuestFromText(context, 'fill in blank', 8, 8, 9)
-# print(easy)
-# print(med)
-# print(diff)
+def get_questions(type, easy, med, hard):
+    output = genquests(type=type, e=easy, m=med, h=hard)
+    questions_list = output.to_json()['kwargs']['content']
+    questions_list = questions_list.split("\n")
+    questions_list = [item for item in questions_list if item != ""]
+    easy_q = []
+    medium_q = []
+    hard_q = []
+    if type == "boolean":
+        easy_q, medium_q, hard_q = extract_tfq(questions_list)
+    else:
+        easy_q, medium_q, hard_q = extract_mcq(questions_list)
+    return easy_q, medium_q, hard_q
+
+str = genquests("multiple choice", 1, 1, 1)
+
+a, b, c = get_questions("multiple choice", 1,1,1)
+print(a)

@@ -65,6 +65,7 @@ def extract_mcq(question_list):
         elif (item.find("Difficult question") != -1):
             current_difficulty = 'hard'
         elif current_difficulty:
+            # print("check: " + item)
             key, value = item.split(': ', 1)
             if (key.find("Question") != -1):
                 current_question = {}
@@ -103,12 +104,13 @@ def generate_questions(language, context, type, easy_num, med_num, hard_num):
             language=language, num_questions=10, type=type, easy_num=easy_num, med_num=med_num, hard_num=hard_num, context=context
         ).to_messages()
     )
-    print(res)
+    # print(res)
     return res
 
 
 def get_questions(language, context, type, easy, med, hard):
     output = generate_questions(language = language, context=context, type=type, easy_num=easy, med_num=med, hard_num=hard)
+    # print(output)
     questions_list = output.to_json()['kwargs']['content']
     questions_list = questions_list.split("\n")
     questions_list = [item for item in questions_list if item != ""]

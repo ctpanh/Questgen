@@ -19,25 +19,20 @@ json_path = "output_questions.json"
 
 @api_view(['POST'])
 def questionGenFromFile(request):
-    file = request.FILES.get("file")
+    # file = request.FILES.get("file")
     easy_num = int(request.data["easy"])
     med_num = int(request.data["medium"])
     hard_num = int(request.data["hard"])
     type_input = request.data["type"]
-    
-    if not file:
-        return Response({"error": "No file uploaded."}, status=400)
-    
-    # Create a model instance to store the file (assuming you have a model named 'FileModel')
-    form = QuestionModel.objects.create(file=file, easy=easy_num, medium=med_num, hard=hard_num, quest_type=type_input)
-    # Get the context from the uploaded file
-    file_path = form.file.path.replace("\\", "/")
-    
-    # Generate the questions using the 'get_questions' function
     questions = genquests(type_input, easy_num, med_num, hard_num)
     
-    
     return Response(extract_mcq(questions))
+
+@api_view(['POST'])
+def questionGenFromFile2(request):
+    questions = genquests(question=request.data["question"])
+    return Response(questions)
+
 
 @extend_schema(
         request=TextSerializer,
@@ -64,5 +59,11 @@ def questionGenFromText(request):
 
 @api_view(['POST'])
 def test(request):
-    load_file(r'server\core\cinderella.txt')
+    file = request.FILES.get("file")
+    form = QuestionModel.objects.create(file=file)
+    if not file:
+        return Response({"error": "No file uploaded."}, status=400)
+    # Get the context from the uploaded file
+    file_path = form.file.path.replace("\\", "/")
+    load_file(file_path)
     return Response({"Success"})

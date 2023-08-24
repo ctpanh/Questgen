@@ -1,4 +1,4 @@
-
+from core.prompt import *
 import os
 import openai
 import sys
@@ -6,12 +6,19 @@ import sys
 from langchain.vectorstores import Chroma
 from langchain.embeddings.openai import OpenAIEmbeddings
 
+
 from langchain.chat_models import ChatOpenAI
 from dotenv import load_dotenv, find_dotenv
 sys.path.append('../..')
 _ = load_dotenv(find_dotenv()) # read local .env file
 
-openai.api_key  = os.environ['OPENAI_API_KEY'] 
+openai.api_key  = os.environ['OPENAI_API_KEY']
+
+from langchain.memory import ConversationBufferMemory
+memory = ConversationBufferMemory(
+    memory_key="chat_history",
+    return_message=True
+)
 
 def extract_tfq(question_list):
     questions = {
@@ -76,7 +83,7 @@ def extract_mcq(question_list):
     return questions
 def delete_file():
     import shutil
-    chroma_dir = 'server\server\core\chroma'
+    chroma_dir = 'server\chroma'
     for root, dirs, files in os.walk(chroma_dir):
         for file_name in files:
             file_path = os.path.join(root, file_name)
@@ -95,7 +102,7 @@ def load_file(path = r'C:\Users\User\Desktop\WebAI\Questgen\server\core\cinderel
     loader = TextLoader(file_path=path)
     doc = []
     doc.extend(loader.load())
-    persist_directory = 'server\server\core\chroma'
+    persist_directory = 'server\chroma'
     embedding = OpenAIEmbeddings()
     vectordb = Chroma(
         persist_directory=persist_directory,
@@ -103,40 +110,39 @@ def load_file(path = r'C:\Users\User\Desktop\WebAI\Questgen\server\core\cinderel
     )
     vectordb.add_documents(documents=doc)
 
-from core.prompt import *
-def genquests(type, e, m, h):
+def genquests(type=None, e=None, m=None, h=None, question=None):
     template = ""
-    if type == "boolean":
+    if type == "tf":
         template = tfq_template
-    if type == "multiple choice":
+    elif type == "mcq":
         template = mcq_template
-    if type == "fill in blank":
+    elif type == "fill":
         template = fill_in_blank_template
-    question = template.format(easy_num=e, med_num=m,hard_num=h)
+    if question=="" or question==None:
+        question = template.format(easy_num=e, med_num=m,hard_num=h)
     import datetime
     current_date = datetime.datetime.now().date()
     if current_date < datetime.date(2023, 9, 2):
         llm_name = "gpt-3.5-turbo-0301"
     else:
         llm_name = "gpt-3.5-turbo"
-    from langchain.vectorstores import Chroma
-    from langchain.embeddings.openai import OpenAIEmbeddings
-    persist_directory = 'server\server\core\chroma'
+    persist_directory = 'server\chroma'
     embedding = OpenAIEmbeddings()
     vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedding)
     llm = ChatOpenAI(model_name=llm_name, temperature=0)
     from langchain.chains import RetrievalQA
     qa_chain = RetrievalQA.from_chain_type(
         llm,
-        retriever=vectordb.as_retriever(search_kwargs={"k": 1})
+        retriever=vectordb.as_retriever(search_kwargs={"k": 1}),
+        memory = memory
     )
     result = qa_chain({"query": question})
     # print(result["result"])
     return result["result"]
 
 # load_file()
-str = genquests("multiple choice", 1, 1, 1)
-print(type(str))
+# str = genquests("multiple choice", 1, 1, 1)
+# print(type(str))
 # # print(str)
 # a = extract_mcq(str)
 # print(a)

@@ -2,8 +2,9 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import QuestionModel
 from .serializers import FileSerializer, TextSerializer
-from core.generate_questions import get_questions, load_txt
+from core.generate_questions import get_questions
 from drf_spectacular.utils import extend_schema
+from core.handle_input import *
 
 
 # Create your views here.
@@ -31,18 +32,12 @@ def questionGenFromFile(request):
     form = QuestionModel.objects.create(file=file, easy=easy_num, medium=med_num, hard=hard_num, quest_type=type_input)
     # Get the context from the uploaded file
     file_path = form.file.path.replace("\\", "/")
-    context = load_txt(file_path)
     
     # Generate the questions using the 'get_questions' function
-    easy_questions, medium_questions, hard_questions = get_questions(context, type_input, easy_num, med_num, hard_num)
+    questions = genquests(type_input, easy_num, med_num, hard_num)
     
-    response_data = {
-        "easy": easy_questions,
-        "medium": medium_questions,
-        "hard": hard_questions
-    }
     
-    return Response(response_data)
+    return Response(extract_mcq(questions))
 
 @extend_schema(
         request=TextSerializer,
@@ -66,3 +61,8 @@ def questionGenFromText(request):
     }
     
     return Response(response_data)
+
+@api_view(['POST'])
+def test(request):
+    load_file(r'server\core\cinderella.txt')
+    return Response({"Success"})

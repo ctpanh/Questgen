@@ -1,8 +1,8 @@
 #main
 import os
 from langchain.chat_models import ChatOpenAI
-from prompt import *
-from handle_input import *
+from core.prompt import *
+from core.handle_input import *
 
 def contains_character(input_string, character):
     return input_string.find(character) != -1

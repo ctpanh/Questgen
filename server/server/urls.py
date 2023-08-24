@@ -24,6 +24,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/getQuestFromFile", views.questionGenFromFile),
     path("api/getQuestFromText", views.questionGenFromText),
+    path("api/load", views.test),
     # swagger
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),

@@ -76,7 +76,7 @@ def extract_mcq(question_list):
     return questions
 def delete_file():
     import shutil
-    chroma_dir = 'server\core\chroma'
+    chroma_dir = 'server\server\core\chroma'
     for root, dirs, files in os.walk(chroma_dir):
         for file_name in files:
             file_path = os.path.join(root, file_name)
@@ -95,7 +95,7 @@ def load_file(path = r'C:\Users\User\Desktop\WebAI\Questgen\server\core\cinderel
     loader = TextLoader(file_path=path)
     doc = []
     doc.extend(loader.load())
-    persist_directory = 'server\core\chroma'
+    persist_directory = 'server\server\core\chroma'
     embedding = OpenAIEmbeddings()
     vectordb = Chroma(
         persist_directory=persist_directory,
@@ -103,7 +103,7 @@ def load_file(path = r'C:\Users\User\Desktop\WebAI\Questgen\server\core\cinderel
     )
     vectordb.add_documents(documents=doc)
 
-from prompt import *
+from core.prompt import *
 def genquests(type, e, m, h):
     template = ""
     if type == "boolean":
@@ -121,7 +121,7 @@ def genquests(type, e, m, h):
         llm_name = "gpt-3.5-turbo"
     from langchain.vectorstores import Chroma
     from langchain.embeddings.openai import OpenAIEmbeddings
-    persist_directory = 'server\core\chroma'
+    persist_directory = 'server\server\core\chroma'
     embedding = OpenAIEmbeddings()
     vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedding)
     llm = ChatOpenAI(model_name=llm_name, temperature=0)
@@ -134,8 +134,9 @@ def genquests(type, e, m, h):
     # print(result["result"])
     return result["result"]
 
-load_file()
+# load_file()
 str = genquests("multiple choice", 1, 1, 1)
-# print(str)
-a = extract_mcq(str)
-print(a)
+print(type(str))
+# # print(str)
+# a = extract_mcq(str)
+# print(a)

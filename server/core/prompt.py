@@ -1,13 +1,13 @@
 tfq_template = (
-    """Create true or false questions and their answers and their explanations with {easy_num} easy questions, {med_num} medium questions, {hard_num} difficult questions to help users learn about the following context: {context}.
-    Please give the response strictly follow below format and don't add or change character/word.
-    
-    ###
+    """Create true or false statements and their answers and their explanations (all statements, answers and explanations are in {language}) with {easy_num} easy questions, {med_num} medium questions, {hard_num} difficult questions to help users learn about the following context: {context}.
+    Translate all statements, answers and explantions into {language}
+    Please give the response strictly follow below format and don't add or change any character/word.
+    Don't translate keywork 'Easy question', 'Statement', 'Answer', 'Explanantion'
     Desired format:
     Easy question: 
-    statement: -||-
-    answer: -||-
-    explanation: -||-
+    Statement: -||- 
+    Answer: -||-
+    Explanation: -||-
     (all the easy question)
     ...
     Medium question:
@@ -22,7 +22,7 @@ tfq_template = (
 mcq_template = (
     """You are a helpful assistant that create multiple choice questions and their answers with {easy_num} easy questions, {med_num} medium questions, {hard_num} difficult questions about the following context: {context}.
     Please give the response strictly follow below format and don't add or change character/word.
-    
+    Don't translate keywork 'Easy question', 'Medium question', 'Difficult question', 'Question', 'Option', 'True option'
     ###
     Desired format:
     Easy question:
@@ -56,25 +56,26 @@ mcq_template = (
     """
 )
 fill_in_blank_template = (
-    """You are a helpful assistant that create fill in blank questions and their answers with {easy_num} easy questions, {med_num} medium questions, {hard_num} difficult questions about the following context: {context}.
-    Please give the response strictly follow below format and don't add or change character/word:
-    
+    """Create fill in the blank questions and their answers with {easy_num} easy questions, {med_num} medium questions, {hard_num} difficult questions about the following context: {context}.
+    Please give the response strictly follow below format and don't add or change character/word.
+    Translate all Question, Option and True option into {language}
+    Don't translate keywork 'Easy question', 'Question', 'Option', 'True option'
     ###
     Desired format:
-    Easy question:
-    Question: (question with blank)
-    Option: -||-
-    Option: -||-
-    Option: -||-
-    Option: -||-
-    True option: -||-
+    Easy question: 
+    Question: OOPs stands for Object Oriented __________ C++. (question with blank)
+    Option: Programming 
+    Option: Polymorphism 
+    Option: Inheritance
+    Option: Abstraction
+    True option: Programming
     (all the easy question)
     ...
     Medium question:
-    (all the medium question)
+    (all the medium fill in the blank questions)
     ...
     Difficult question:
-    (all the difficult question)
+    (all the difficult fill in the blank questions)
     ...
     ###
     """

@@ -1,7 +1,7 @@
 #main
 import os
-# from dotenv import load_dotenv
-# load_dotenv()
+from dotenv import load_dotenv
+load_dotenv()
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts.chat import (
     ChatPromptTemplate,
@@ -9,6 +9,7 @@ from langchain.prompts.chat import (
     HumanMessagePromptTemplate,
 )
 from core.prompt import tfq_template, mcq_template, fill_in_blank_template 
+# from prompt import tfq_template, mcq_template, fill_in_blank_template 
 from langchain.schema import AIMessage, HumanMessage, SystemMessage
 import re
 

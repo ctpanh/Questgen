@@ -37,12 +37,12 @@ def convert_pdf(pdf_path, is_cuda=False):
         
         print(page)
         print('----------------')
-    with open('/mnt/banana/k66/thuy/Questgen/server/core/his_geo.txt', 'w') as file:
+    with open('D:\SK\Questgen\server\core\his_geo.txt', 'w', encoding="utf-8") as file:
         # Write the contents of the 'article' variable to the file
             file.write(full_text)
     return full_text
   
 if __name__ == '__main__':
-    convert_pdf('/mnt/banana/k66/thuy/Questgen/server/core/Lịch sử và Địa lý 5-5-24.pdf')
+    convert_pdf('D:\SK\Questgen\server\core\Lịch sử và Địa lý 5-5-24.pdf')
 
     

@@ -1,7 +1,10 @@
 # from core.Questgen import main
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-from server.core.generate_questions import get_questions
+from core.generate_questions import get_questions
+from core.pdf2txt import convert_pdf
+# from generate_questions import get_questions
+# from pdf2txt import convert_pdf
 
 def load_txt(txt_path):
     f = open(txt_path, "r", encoding="utf8")
@@ -62,10 +65,22 @@ def getQuestFromText(language, context, type, easy, med, hard):
         easy_ques, med_ques, diff_ques = get_questions(language=language, context=context, type=type, easy=easy, med=med, hard=hard)
     return easy_ques, med_ques, diff_ques
 
-context = load_txt('/mnt/banana/k66/thuy/Questgen/server/core/his_geo.txt')
-easy, med, diff = getQuestFromText("Vietnamese", context, 'fill in blank', 5, 5, 5)
-print(easy)
-print('----------------------')
-print(med)
-print('----------------------')
-print(diff)
+def getQuestFromFile(language, file_path, type, easy, med, hard):
+    file_path = "D:/SK/Questgen/server/store/Lịch_sử_và_Địa_lý_5-5-24-1-10-1-5-1_gk97DKj.pdf"
+    x = file_path.split(".")
+    context = ""
+    if (x[-1] == "pdf"):
+        convert_pdf(file_path)
+        context = load_txt('D:\SK\Questgen\server\core\his_geo.txt')
+    else:
+        context = load_txt(file_path)
+    return getQuestFromText(language, context, type, easy, med, hard)
+
+# context = load_txt("D:\SK\Questgen\server\core\his_geo.txt")
+# file_path = "D:/SK/Questgen/server/store/Lich_su_va_Đia_ly_5-5-24_M0rZLAr.pdf"
+# easy, med, diff = getQuestFromFile("Vietnamese", file_path, 'fill in blank', 5, 5, 5)
+# print(easy)
+# print('----------------------')
+# print(med)
+# print('----------------------')
+# print(diff)

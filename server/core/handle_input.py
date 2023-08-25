@@ -66,7 +66,6 @@ def getQuestFromText(language, context, type, easy, med, hard):
     return easy_ques, med_ques, diff_ques
 
 def getQuestFromFile(language, file_path, type, easy, med, hard):
-    file_path = "D:/SK/Questgen/server/store/Lịch_sử_và_Địa_lý_5-5-24-1-10-1-5-1_gk97DKj.pdf"
     x = file_path.split(".")
     context = ""
     if (x[-1] == "pdf"):

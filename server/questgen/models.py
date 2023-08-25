@@ -9,5 +9,6 @@ class QuestionModel(models.Model):
     medium = models.PositiveIntegerField(default=1)
     hard = models.PositiveIntegerField(default=1)
     quest_type = models.TextField(default="boolean")
+    language = models.TextField(default="english")
     def __str__(self):
         return self.file.name

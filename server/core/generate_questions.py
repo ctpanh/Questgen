@@ -1,15 +1,15 @@
 #main
 import os
-# from dotenv import load_dotenv
-# load_dotenv()
+from dotenv import load_dotenv
+load_dotenv()
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts.chat import (
     ChatPromptTemplate,
-    SystemMessagePromptTemplate,
     AIMessagePromptTemplate,
     HumanMessagePromptTemplate,
 )
 from core.prompt import tfq_template, mcq_template, fill_in_blank_template 
+# from prompt import tfq_template, mcq_template, fill_in_blank_template 
 from langchain.schema import AIMessage, HumanMessage, SystemMessage
 import re
 
@@ -28,15 +28,11 @@ def extract_tfq(question_list):
     for item in question_list:
         if (item.find("Easy question") != -1):
             current_difficulty = 'easy'
-            # current_question = {}
         elif (item.find("Medium question") != -1):
             current_difficulty = 'medium'
-            # current_question = {}
         elif (item.find("Difficult question") != -1):
             current_difficulty = 'hard'
-            # current_question = {}
         elif current_difficulty:
-            # print(item.split(': ', 1))
             key, value = item.split(': ', 1)
             if key.find('Statement') != -1:
                 current_question = {}
@@ -47,9 +43,7 @@ def extract_tfq(question_list):
                 current_question['answer'] = value
             elif key.find('Explanation') != -1:
                 current_question['explanation'] = value
-                # print("go here")
                 questions[current_difficulty].append(current_question)
-                # print(current_question)
             else:
                 continue
 
@@ -68,11 +62,12 @@ def extract_mcq(question_list):
     for item in question_list:
         if "Easy question" in item:
             current_difficulty = 'easy'
-        elif "Medium question" in item:
+        elif (item.find("Medium question") != -1):
             current_difficulty = 'medium'
-        elif "Difficult question" in item:
+        elif (item.find("Difficult question") != -1):
             current_difficulty = 'hard'
-        elif current_difficulty and ': ' in item:
+        elif current_difficulty:
+            # print("check: " + item)
             key, value = item.split(': ', 1)
             if key == 'Question':
                 current_question = {}
@@ -92,8 +87,8 @@ def extract_mcq(question_list):
 
     return questions['easy'], questions['medium'], questions['hard']
 
-def generate_questions(context, type, easy_num, med_num, hard_num):
-    chat = ChatOpenAI(temperature=0, openai_api_key="")
+def generate_questions(language, context, type, easy_num, med_num, hard_num):
+    chat = ChatOpenAI(temperature=0, openai_api_key=os.getenv('OPENAI_API_KEY'))
     
     template = ""
     if type == "boolean":
@@ -111,31 +106,28 @@ def generate_questions(context, type, easy_num, med_num, hard_num):
 
     res = chat(
         chat_prompt.format_prompt(
-            num_questions=10, type=type, easy_num=easy_num, med_num=med_num, hard_num=hard_num, context=context
+            language=language, num_questions=10, type=type, easy_num=easy_num, med_num=med_num, hard_num=hard_num, context=context
         ).to_messages()
     )
-    # question = process(res, easy_num, med_num, hard_num)
+    # print(res)
     return res
 
 
-def get_questions(context, type, easy, med, hard):
-    output = generate_questions(context=context, type=type, easy_num=easy, med_num=med, hard_num=hard)
+def get_questions(language, context, type, easy, med, hard):
+    output = generate_questions(language = language, context=context, type=type, easy_num=easy, med_num=med, hard_num=hard)
     # print(output)
     questions_list = output.to_json()['kwargs']['content']
     questions_list = questions_list.split("\n")
     questions_list = [item for item in questions_list if item != ""]
-    # print(questions_list)
     easy_q = []
     medium_q = []
     hard_q = []
+    
     if type == "boolean":
         easy_q, medium_q, hard_q = extract_tfq(questions_list)
-        # print(easy)
     else:
         easy_q, medium_q, hard_q = extract_mcq(questions_list)
-    # print(easy)
-    # print(medium)
-    # print(hard)
+
     return easy_q, medium_q, hard_q
 def load_txt(txt_path):
     f = open(txt_path, "r", encoding="utf8")
@@ -148,7 +140,7 @@ Male dominance is exhibited by the royal family when they hold a royal ball, req
 Cinderella is a folktale that speaks of oppression and yields that are triumphant. Women, who are usually belittled by society, are seen to have transformative gains since they end up in powerful positions, in this case, a princess. Cinderella has been described in terms of numerous setups, but the first and most outstanding variant is that of Rhodopids retrieved by a geographer from Greece known as Strabo between 7Bc and AD23. The story demonstrates how a Greek slave gets married to an Egyptian king. However, it is necessary to note that Disney based its report on a tale written by Charles Perrault, whose story revolves around a girl with a cruel stepmother and evil stepsisters force to serve them.
  """
 
-# easy, medium, hard = get_questions(context=context, type="boolean", easy=0, med=0, hard=0)
+# easy, medium, hard = get_questions(context=context, type="boolean", easy=3, med=4, hard=2)
 # print(easy)
 # print(medium)
 # print(hard)

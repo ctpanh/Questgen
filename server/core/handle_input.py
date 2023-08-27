@@ -92,7 +92,7 @@ def delete_file():
             dir_path = os.path.join(root, dir_name)
             shutil.rmtree(dir_path)
 
-def load_file(path = r'C:\Users\User\Desktop\WebAI\Questgen\server\core\cinderella.txt'):
+def load_file(path = r'C:\Users\User\Desktop\WebAI\Questgen\server\core\4000.txt'):
     #delete file
     delete_file()
     #load file
@@ -123,9 +123,9 @@ def genquests(type=None, e=None, m=None, h=None, question=None):
     import datetime
     current_date = datetime.datetime.now().date()
     if current_date < datetime.date(2023, 9, 2):
-        llm_name = "gpt-3.5-turbo-0301"
+        llm_name = "gpt-3.5-turbo-16k"
     else:
-        llm_name = "gpt-3.5-turbo"
+        llm_name = "gpt-3.5-turbo-16k"
     persist_directory = 'server\chroma'
     embedding = OpenAIEmbeddings()
     vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedding)

@@ -99,7 +99,7 @@ def load_file(path = r'C:\Users\User\Desktop\WebAI\Questgen\server\core\4000.txt
     from dotenv import load_dotenv, find_dotenv
     _ = load_dotenv(find_dotenv())
     from langchain.document_loaders import TextLoader
-    loader = TextLoader(file_path=path)
+    loader = TextLoader(file_path=path, encoding="utf8")
     doc = []
     doc.extend(loader.load())
     persist_directory = 'server\chroma'
@@ -119,7 +119,7 @@ def genquests(type=None, e=None, m=None, h=None, question=None):
     elif type == "fill":
         template = fill_in_blank_template
     if question=="" or question==None:
-        question = template.format(easy_num=e, med_num=m,hard_num=h)
+        question = template.format(language = "vietnamese", easy_num=e, med_num=m,hard_num=h)
     import datetime
     current_date = datetime.datetime.now().date()
     if current_date < datetime.date(2023, 9, 2):

@@ -51,7 +51,7 @@ def questionGenFromText(request):
     hard_num = int(request.data["hard"])
     type_input = request.data["type"]
 
-    easy_questions, medium_questions, hard_questions = get_questions(context, type_input, easy_num, med_num, hard_num)
+    easy_questions, medium_questions, hard_questions = get_questions(type_input, easy_num, med_num, hard_num)
     
     response_data = {
         "easy": easy_questions,

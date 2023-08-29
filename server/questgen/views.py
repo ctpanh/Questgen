@@ -25,7 +25,11 @@ def questionGenFromFile(request):
     hard_num = int(request.data["hard"])
     type_input = request.data["type"]
     questions = genquests(type_input, easy_num, med_num, hard_num)
-    
+
+    if type_input == 'tf':
+        print(questions)
+        print(extract_tfq(questions))
+        return Response(extract_tfq(questions))
     return Response(extract_mcq(questions))
 
 @api_view(['POST'])

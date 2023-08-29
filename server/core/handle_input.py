@@ -21,37 +21,37 @@ memory = ConversationBufferMemory(
 )
 
 def extract_tfq(question_list):
+    question_list = question_list.strip().split('\n')
     questions = {
         'easy': [],
         'medium': [],
         'hard': []
     }
     current_difficulty = None
-    current_question = None
+    current_question = {}
 
-    for item in question_list:
-        if (item.find("Easy question") != -1):
+    for line in question_list:
+        if line.startswith("Easy question"):
             current_difficulty = 'easy'
-        elif (item.find("Medium question") != -1):
+            current_question = {}
+        elif line.startswith("Medium question"):
             current_difficulty = 'medium'
-        elif (item.find("Difficult question") != -1):
+            current_question = {}
+        elif line.startswith("Difficult question"):
             current_difficulty = 'hard'
-        elif current_difficulty:
-            key, value = item.split(': ', 1)
-            if key.find('Statement') != -1:
-                current_question = {}
-                current_question['question'] = value
-                current_question['answer'] = []  # Initialize 'option' as an empty list
-                current_question['explanation'] = []  # Initialize 'true option' as an empty list
-            elif key.find('Answer') != -1:
-                current_question['answer'] = value
-            elif key.find('Explanation') != -1:
-                current_question['explanation'] = value
-                questions[current_difficulty].append(current_question)
-            else:
-                continue
-
-    return questions['easy'], questions['medium'], questions['hard']
+            current_question = {}
+        elif line.startswith("Statement:"):
+            current_question['question'] = line[len("Statement: "):]
+        elif line.startswith("Answer:"):
+            current_question['answer'] = line[len("Answer: "):]
+        elif line.startswith("Explanation:"):
+            current_question['explanation'] = line[len("Explanation: "):]
+            questions[current_difficulty].append(current_question)
+    lists = []
+    lists.extend(questions['easy'])
+    lists.extend(questions['medium'])
+    lists.extend(questions['hard'])
+    return lists
 
 def extract_mcq(question_list):
     questions = []
@@ -141,8 +141,8 @@ def genquests(type=None, e=None, m=None, h=None, question=None):
     return result["result"]
 
 # load_file()
-# str = genquests("multiple choice", 1, 1, 1)
+# str = genquests("tf", 1, 1, 1)
 # print(type(str))
-# # print(str)
-# a = extract_mcq(str)
+# print(str)
+# a = extract_tfq(str)
 # print(a)

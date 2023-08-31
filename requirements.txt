@@ -6,3 +6,5 @@ drf_spectacular_sidecar
 langchain
 openai
 dotenv
+easyocr
+pdf2image

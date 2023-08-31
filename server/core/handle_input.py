@@ -109,6 +109,15 @@ def load_txt(path=""):
     )
     vectordb.add_documents(documents=doc)
 
+def load_context(context=""):
+    persist_directory = 'server\chroma'
+    embedding = OpenAIEmbeddings()
+    vectordb = Chroma(
+        persist_directory=persist_directory,
+        embedding_function=embedding
+    )
+    vectordb.add_texts(texts=context)
+
 def load_file(file_path=""):
     x = file_path.split(".")
     if (x[-1] == "pdf"):

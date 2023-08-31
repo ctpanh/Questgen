@@ -48,18 +48,17 @@ def questionGenFromFile(request):
 @api_view(['POST'])
 def questionGenFromText(request):
     language = request.data["language"]
-    context = request.data["text"]
+    text = request.data["text"]
     easy_num = int(request.data["easy"])
     med_num = int(request.data["medium"])
-    hard_num = int(request.data["hard"])
+    hard_num = int(request.data["hard"])    
     type_input = request.data["quest_type"]
 
-    easy_questions, medium_questions, hard_questions = genquests(language, type_input, easy_num, med_num, hard_num)
-    
-    response_data = {
-        "easy": easy_questions,
-        "medium": medium_questions,
-        "hard": hard_questions
-    }
-    
-    return Response(response_data)
+    load_context(context=text)
+    questions = genquests(language, type_input, easy_num, med_num, hard_num)
+
+    if type_input == 'tf':
+        print(questions)
+        print(extract_tfq(questions))
+        return Response(extract_tfq(questions))
+    return Response(extract_mcq(questions))

@@ -2,13 +2,12 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import QuestionModel
 from .serializers import FileSerializer, TextSerializer
-from core.handle_input import getQuestFromText, getQuestFromFile
 from drf_spectacular.utils import extend_schema
+from core.handle_input import *
 
 
 # Create your views here.
 
-json_path = "output_questions.json"
 
 @extend_schema(
         request=FileSerializer,
@@ -24,25 +23,22 @@ def questionGenFromFile(request):
     med_num = int(request.data["medium"])
     hard_num = int(request.data["hard"])
     type_input = request.data["quest_type"]
-    
+
     if not file:
         return Response({"error": "No file uploaded."}, status=400)
-    
-    # Create a model instance to store the file (assuming you have a model named 'FileModel')
-    form = QuestionModel.objects.create(file=file, easy=easy_num, medium=med_num, hard=hard_num, quest_type=type_input)
+    # Create a model instance to store the file
+    form = QuestionModel.objects.create(file=file, easy=easy_num, medium=med_num, hard=hard_num, quest_type=type_input, language=language)
     # Get the context from the uploaded file
     file_path = form.file.path.replace("\\", "/")
-    
-    # Generate the questions using the 'get_questions' function
-    easy_questions, medium_questions, hard_questions = getQuestFromFile(language, file_path, type_input, easy_num, med_num, hard_num)
-    
-    response_data = {
-        "easy": easy_questions,
-        "medium": medium_questions,
-        "hard": hard_questions
-    }
-    
-    return Response(response_data)
+    load_file(file_path)
+
+    questions = genquests(language, type_input, easy_num, med_num, hard_num)
+
+    if type_input == 'tf':
+        print(questions)
+        print(extract_tfq(questions))
+        return Response(extract_tfq(questions))
+    return Response(extract_mcq(questions))
 
 @extend_schema(
         request=TextSerializer,
@@ -58,7 +54,7 @@ def questionGenFromText(request):
     hard_num = int(request.data["hard"])
     type_input = request.data["quest_type"]
 
-    easy_questions, medium_questions, hard_questions = getQuestFromText(language, context, type_input, easy_num, med_num, hard_num)
+    easy_questions, medium_questions, hard_questions = genquests(language, type_input, easy_num, med_num, hard_num)
     
     response_data = {
         "easy": easy_questions,

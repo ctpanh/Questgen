@@ -1,85 +1,147 @@
-# from core.Questgen import main
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-
-from core.generate_questions import get_questions
+from core.prompt import *
 from core.pdf2txt import convert_pdf
-# from generate_questions import get_questions
-# from pdf2txt import convert_pdf
+import os
+import openai
+import sys
+from langchain.vectorstores import Chroma
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.memory import ConversationBufferMemory
+from langchain.chat_models import ChatOpenAI
+from dotenv import load_dotenv, find_dotenv
 
-def load_txt(txt_path):
-    f = open(txt_path, "r", encoding="utf8")
-    context = f.read()
-    return context
 
-def count_words(context):
-    words = context.split()
-    num_words = len(words)
-    return num_words
+sys.path.append('../..')
+_ = load_dotenv(find_dotenv()) # read local .env file
 
-def get_chunks(context, max_length=3000, overlap=50):
+openai.api_key  = os.environ['OPENAI_API_KEY']
 
-    # chunks = [context[i:i+max_length] for i in range(0, len(context), max_length)]
-    chunks = [context[i:i+max_length] for i in range(0, len(context), max_length - overlap)]
-    return chunks
+memory = ConversationBufferMemory(
+    memory_key="chat_history",
+    return_message=True
+)
 
-def get_chunks_2(context, length, overlap):
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size = length,
-        chunk_overlap = overlap,
-        length_function = len,
-        add_start_index = True
+def extract_tfq(question_list):
+    question_list = question_list.strip().split('\n')
+    questions = {
+        'easy': [],
+        'medium': [],
+        'hard': []
+    }
+    current_difficulty = None
+    current_question = {}
+
+    for line in question_list:
+        if line.startswith("Easy question"):
+            current_difficulty = 'easy'
+            current_question = {}
+        elif line.startswith("Medium question"):
+            current_difficulty = 'medium'
+            current_question = {}
+        elif line.startswith("Difficult question"):
+            current_difficulty = 'hard'
+            current_question = {}
+        elif line.startswith("Statement:"):
+            current_question['question'] = line[len("Statement: "):]
+        elif line.startswith("Answer:"):
+            current_question['answer'] = line[len("Answer: "):]
+        elif line.startswith("Explanation:"):
+            current_question['explanation'] = line[len("Explanation: "):]
+            questions[current_difficulty].append(current_question)
+    lists = []
+    lists.extend(questions['easy'])
+    lists.extend(questions['medium'])
+    lists.extend(questions['hard'])
+    return lists
+def extract_mcq(question_list):
+    questions = []
+
+    current_question = {}
+
+    for item in question_list.split('\n'):
+        if "Easy question" in item:
+            current_question['difficulty'] = 'easy'
+        elif "Medium question" in item:
+            current_question['difficulty'] = 'medium'
+        elif "Difficult question" in item:
+            current_question['difficulty'] = 'hard'
+        elif ': ' in item:
+            key, value = item.split(': ', 1)
+            if key == 'Question':
+                current_question['question'] = value
+                current_question['options'] = []
+                current_question['true option'] = []
+            elif key.startswith('Option'):
+                current_question['options'].append(value)
+            elif key == 'True option':
+                current_question['true option'].append(value)
+
+                # When we have collected all information for the current question, add it to the list
+                questions.append(current_question)
+                current_question = {}
+
+    return questions
+def delete_file():
+    import shutil
+    chroma_dir = 'server\chroma'
+    for root, dirs, files in os.walk(chroma_dir):
+        for file_name in files:
+            file_path = os.path.join(root, file_name)
+            os.remove(file_path)
+        for dir_name in dirs:
+            dir_path = os.path.join(root, dir_name)
+            shutil.rmtree(dir_path)
+
+def load_txt(path=""):
+    #delete file
+    delete_file()
+    #load file
+    from dotenv import load_dotenv, find_dotenv
+    _ = load_dotenv(find_dotenv())
+    from langchain.document_loaders import TextLoader
+    loader = TextLoader(file_path=path, encoding="utf8")
+    doc = []
+    doc.extend(loader.load())
+    persist_directory = 'server\chroma'
+    embedding = OpenAIEmbeddings()
+    vectordb = Chroma(
+        persist_directory=persist_directory,
+        embedding_function=embedding
     )
-    return text_splitter.create_documents([context])
+    vectordb.add_documents(documents=doc)
 
-
-def getQuestFromText(language, context, type, easy, med, hard):
-    num_words = count_words(context)
-    outputs = []
-    easy_ques = []
-    med_ques = []
-    diff_ques = []
-    max_words = 3000
-    if num_words >= max_words:
-        print("more than 3000 words")
-        chunks = get_chunks(context)
-        
-        easy = easy / len(chunks) + 1
-        med = med / len(chunks) + 1 
-        hard = hard / len(chunks) + 1
-        for chunk in chunks:
-            easy_q, med_q, diff_q = get_questions(language=language, context=chunk, type=type, easy=easy, med=med, hard=hard)
-            easy_ques.append(easy_q)
-            med_ques.append(med_q)
-            diff_ques.append(diff_q)
-            
-            # easy_ques.flatten()
-            # med_ques.flatten()
-            # diff_ques.flatten()
-        easy_ques = [item for sublist in easy_ques for item in sublist]
-        med_ques = [item for sublist in med_ques for item in sublist]
-        diff_ques = [item for sublist in diff_ques for item in sublist]
-            
-
-    else:
-        print("less than 3000 words")
-        easy_ques, med_ques, diff_ques = get_questions(language=language, context=context, type=type, easy=easy, med=med, hard=hard)
-    return easy_ques, med_ques, diff_ques
-
-def getQuestFromFile(language, file_path, type, easy, med, hard):
+def load_file(file_path=""):
     x = file_path.split(".")
-    context = ""
     if (x[-1] == "pdf"):
         convert_pdf(file_path)
-        context = load_txt('D:\SK\Questgen\server\core\his_geo.txt')
+        load_txt('D:\SK\Questgen\server\core\his_geo.txt')
     else:
-        context = load_txt(file_path)
-    return getQuestFromText(language, context, type, easy, med, hard)
+        load_txt(file_path)
 
-# context = load_txt("D:\SK\Questgen\server\core\his_geo.txt")
-# file_path = "D:/SK/Questgen/server/store/Lich_su_va_Đia_ly_5-5-24_M0rZLAr.pdf"
-# easy, med, diff = getQuestFromFile("Vietnamese", file_path, 'fill in blank', 5, 5, 5)
-# print(easy)
-# print('----------------------')
-# print(med)
-# print('----------------------')
-# print(diff)
+def genquests(l=None, type=None, e=None, m=None, h=None, question=None):
+    template = ""
+    if type == "tf":
+        template = tfq_template
+    elif type == "mcq":
+        template = mcq_template
+    elif type == "fill":
+        template = fill_in_blank_template
+    if question=="" or question==None:
+        question = template.format(language=l, easy_num=e, med_num=m,hard_num=h)
+    import datetime
+    current_date = datetime.datetime.now().date()
+    if current_date < datetime.date(2023, 9, 2):
+        llm_name = "gpt-3.5-turbo-16k"
+    else:
+        llm_name = "gpt-3.5-turbo-16k"
+    persist_directory = 'server\chroma'
+    embedding = OpenAIEmbeddings()
+    vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedding)
+    llm = ChatOpenAI(model_name=llm_name, temperature=0)
+    from langchain.chains import RetrievalQA
+    qa_chain = RetrievalQA.from_chain_type(
+        llm,
+        retriever=vectordb.as_retriever(search_kwargs={"k": 1}),
+        memory = memory
+    )
+    result = qa_chain({"query": question})
+    return result["result"]

@@ -1,6 +1,6 @@
 tfq_template = (
-    """Create true or false statements and their answers and their explanations (all statements, answers and explanations are in {language}) with {easy_num} easy questions, {med_num} medium questions, {hard_num} difficult questions to help users learn about the following context: {context}.
-    Translate all statements, answers and explantions into {language}
+    """Create true or false statements and their answers and their explanations (all statements, answers and explanations are in {language}) with {easy_num} easy questions, {med_num} medium questions, {hard_num} difficult questions to help users learn about the document.
+    Translate all statements, answers and explantions into {language}.
     Please give the response strictly follow below format and don't add or change any character/word.
     Don't translate keywork 'Easy question', 'Statement', 'Answer', 'Explanantion'
     Desired format:
@@ -20,7 +20,8 @@ tfq_template = (
     """
 )
 mcq_template = (
-    """You are a helpful assistant that create multiple choice questions and their answers with {easy_num} easy questions, {med_num} medium questions, {hard_num} difficult questions about the following context: {context}.
+    """You are a helpful assistant that create multiple choice questions and their answers with {easy_num} easy questions, {med_num} medium questions, {hard_num} difficult questions about the document.
+    Translate all questions, options and true option into {language}.
     Please give the response strictly follow below format and don't add or change character/word.
     Don't translate keywork 'Easy question', 'Medium question', 'Difficult question', 'Question', 'Option', 'True option'
     ###
@@ -56,9 +57,9 @@ mcq_template = (
     """
 )
 fill_in_blank_template = (
-    """Create fill in the blank questions and their answers with {easy_num} easy questions, {med_num} medium questions, {hard_num} difficult questions about the following context: {context}.
+    """Create fill in the blank questions and their answers with {easy_num} easy questions, {med_num} medium questions, {hard_num} difficult questions about the document.
     Please give the response strictly follow below format and don't add or change character/word.
-    Translate all Question, Option and True option into {language}
+    Translate all Question, Option and True option into {language}.
     Don't translate keywork 'Easy question', 'Question', 'Option', 'True option'
     ###
     Desired format:

@@ -144,4 +144,24 @@ def genquests(l=None, type=None, e=None, m=None, h=None, question=None):
         memory = memory
     )
     result = qa_chain({"query": question})
+
     return result["result"]
+
+
+def paraphrase(sentence):
+    prompt = "Paraphrase the following sentence:" + sentence
+    response = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=prompt,
+        max_tokens=200
+    )
+
+    paraphrased_sentence = response.choices[0].text.strip()
+    return paraphrased_sentence
+
+# load_file()
+# str = genquests("tf", 1, 1, 1)
+# print(type(str))
+# print(str)
+# a = extract_tfq(str)
+# print(a)

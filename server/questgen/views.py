@@ -63,3 +63,19 @@ def questionGenFromText(request):
     }
     
     return Response(response_data)
+
+@api_view(['POST'])
+def test(request):
+    file = request.FILES.get("file")
+    form = QuestionModel.objects.create(file=file)
+    if not file:
+        return Response({"error": "No file uploaded."}, status=400)
+    # Get the context from the uploaded file
+    file_path = form.file.path.replace("\\", "/")
+    load_file(file_path)
+    return Response({"Success"})
+
+@api_view(['GET'])
+def para(request):
+    sentence = request.data['sentence']
+    return Response(paraphrase(sentence=sentence))

@@ -5,4 +5,4 @@ drf-spectacular
 drf_spectacular_sidecar
 langchain
 openai
-dotenv
+pydotenv

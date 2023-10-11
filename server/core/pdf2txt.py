@@ -4,9 +4,15 @@ import easyocr
 from pdf2image import convert_from_path
 import numpy as np
 
+
 class Reader:
     def __init__(self, is_cuda=False):
-        self.reader = easyocr.Reader(['vi'], gpu=is_cuda, model_storage_directory=os.path.join('models'), download_enabled=True)
+        self.reader = easyocr.Reader(
+            ["vi"],
+            gpu=is_cuda,
+            model_storage_directory=os.path.join("models"),
+            download_enabled=True,
+        )
 
     def __call__(self, img):
         return self.extract_text(img)
@@ -16,33 +22,28 @@ class Reader:
 
         extracted_text = []
 
-        for text in filter(lambda x: x[-1] > .45, result):
+        for text in filter(lambda x: x[-1] > 0.45, result):
             box, acc_text, confidence = text
             extracted_text.append(acc_text)
 
         return extracted_text
 
+
 def convert_pdf(pdf_path, is_cuda=False):
     reader = Reader(is_cuda)
     images = convert_from_path(pdf_path)
-    full_text = ''
+    full_text = ""
     for img in images:
-        page = ''
+        page = ""
         img = np.array(img)
         text = reader(img)
         for t in text:
             page += t
-            page += ' '
+            page += " "
         full_text += page
-        
-        print(page)
-        print('----------------')
-    with open('D:\SK\Questgen\server\core\his_geo.txt', 'w', encoding="utf-8") as file:
-        # Write the contents of the 'article' variable to the file
-            file.write(full_text)
-    return full_text
-  
-if __name__ == '__main__':
-    convert_pdf('D:\SK\Questgen\server\core\Lịch sử và Địa lý 5-5-24.pdf')
 
-    
+        print(page)
+        print("----------------")
+    with open("text.txt", "w", encoding="utf-8") as file:
+        file.write(full_text)
+    return full_text

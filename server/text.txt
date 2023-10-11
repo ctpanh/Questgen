@@ -1,0 +1,153 @@
+FUNDAMENTALS OF C++
+1.1 Introduction of C++
+1.2 ObjectOriented Programming 1.3 Encapsulation
+1.4 Polymorphism
+1.5 Inheritance
+1.6 The Need for C++
+1.7 Characteristics of OOPs
+1.8 C++ and C
+1.1 INTRODUCTION OF C++
+The history of C begins with C. C is built upon the foundation of C. Thus, C is a superset of C. C expanded and enhanced the C language to support objectoriented programming which is described later in this module. C also added several other improvements to the C language, including an extended set of library routines. However, much of the spirit and flavor of C is directly inherited from C. Therefore, to fully understand and appreciate C, you need to understand the how and why behind C.
+C was invented by Bjarne Stroustrup in 1979, at Bell Laboratories in Murray Hill, New Jersey. He initially called the new language C with Classes However in 1983 the name was changed to C++ Stroustrup built C++ on the foundation of C including all of Cs features attributes and benefits He also adhered to Cs underlying philosophy that the programmer not the language is in charge t this point it is critical to understand that Stroustrup did not create an entirely new programming language. Instead, he enhanced an already highly successful language.
+Most of the features that Stroustrup added to C were designed to support objectoriented programming. In essence, C++ is the objectoriented version of C. By building upon the foundation of C, Stroustrup provided a smooth migration path to OOP. Instead of having to learn an entirely new language, a C programmer needed to learn only a few new features before reaping the benefits of the objectoriented methodology
+  
+5
+1.2 OBJECTORIENTED PROGRAMMING
+Central to C++ is objectoriented programming OOP. OOP was the impetus for the creation of C++ Because of this it is useful to understand OOPs basic principles before you write even a simple C++ program.
+Objectoriented programming took the best ideas of structured programming and combined them with several new concepts. The result was a different and better way of organizing a program. In the most general sense, a program can be organized in one of two ways around its code what is happening or around its data who is being affected. Using only structured programming techniques, programs are typically organized around code. This approach can be thought of as code acting on data 
+Objectoriented programs work the other way around. They are organized around data, with the key principle being data controlling access to code In an object oriented language you define the data and the routines that are permitted to act on that data. Thus, a data type defines precisely what sort of operations can be applied to that data.
+To support the principles of objectoriented programming, all OOP languages, including C++, have three traits in common encapsulation, polymorphism and inheritance. Lets examine each.
+1.3 ENCAPSULATION
+Encapsulation is a programming mechanism that binds together code and the data it manipulates, and that keeps both safe from outside interference and misuse. In an objectoriented language, code and data can be bound together in such a way that a selfcontained black box is created. Within the box are all necessary data and code. When code and data are linked together in this fashion, an object is created. In other words, an object is the device that supports encapsulation.
+1.4 POLYMORPHISM
+Polymorphism from Greek meaning many forms is the quality that allows one interface to access a general class of actions. A simple example of polymorphism is found in the steering wheel of an automobile. The steering wheel the interface is the same no matter what type of actual steering mechanism is used. That is, the steering wheel works the same whether your car has manual steering, power steering, or rackandpinion steering. Thus,
+      
+6
+turning the steering wheel left causes the car to go left no matter what type of steering is used. The benefit of the uniform interface is, of course, that once you know how to operate the steering wheel, you can drive any type of car.
+The same principle can also apply to programming. For example, consider a stack which is a firstin, lastout list. You might have a program that requires three different types of stacks. One stack is used for integer values, one for floatingpoint values, and one for characters. In this case, the algorithm that implements each stack is the same, even though the data being stored differs. In a nonobjectoriented language, you would be required to create three different sets of stack routines, with each set using different names. However, because of polymorphism, in C++ you can create one general set of stack routines that works for all three situations. This way, once you know how to use one stack, you can use them all.
+1.5 INHERITANCE
+Inheritance is the process by which one object can acquire the properties of another object. This is important because it supports the concept of hierarchical classification. If you think about it, most knowledge is made manageable by hierarchical that is, topdown classifications. For example, a Red Delicious apple is part of the classification apple, which in turn is part of the fruit class, which is under the larger class food. That is, the food class possesses certain qualities edible, nutritious, and so on which also, logically, apply to its subclass, fruit. In addition to these qualities, the fruit class has specific characteristics juicy, sweet, and so on that distinguish it from other food. The apple class defines those qualities specific to an apple grows on trees, not tropical, and so on. A Red Delicious apple would, in turn, inherit all the qualities of all preceding classes and would define only those qualities that make it unique.
+Without the use of hierarchies, each object would have to explicitly define all of its characteristics. Using inheritance, an object need only define those qualities that make it unique within its class. It can inherit its general attributes from its parent. Thus, it is the inheritance mechanism that makes it possible for one object to be a specific instance of a more general case.
+1.6 THE NEED FOR C++
+Given the preceding discussion, you might be wondering why C++ was invented. Since C was a successful computer programming language, why was there a need for something else?
+    
+7
+The answer is complexity. Throughout the history of programming, the increasing complexity of programs has driven the need for better ways to manage that complexity. C++ is a response to that need. To better understand the correlation between increasing program complexity and computer language development, consider the following. Approaches to programming have changed dramatically since the invention of the computer.
+For example when computers were first invented programming was done by using the computers front panel to toggle in the binary machine instructions. As long as programs were just a few hundred instructions long, this approach worked. As programs grew, assembly language was invented so that programmers could deal with larger, increasingly complex programs by using symbolic representations of the machine instructions. As programs continued to grow, highlevel languages were developed to give programmers more tools with which to handle the complexity.
+The first widely used computer language was, of course, FORTRAN. While FORTRAN was a very impressive first step, it is hardly a language that encourages clear, easytounder
+
+stand programs. The 1960s gave birth to structured programming, which is the method of programming encouraged by languages such as C. With structured languages it was, for the first time, possible to write moderately complex programs fairly easily. However, even with structured programming methods, once a project reaches a certain size, its complexity exceeds what a programmer can manage. By the late 1970s, many projects were near or at this point.
+In response to this problem, a new way to program began to emerge: objectoriented programming OOP. Using OOP, a programmer could handle larger, more complex programs. The trouble was that C did not support objectoriented programming. The desire for an objectoriented version of C ultimately led to the creation of C++.
+In the final analysis, although C is one of the most liked and widely used professional programming languages in the world, there comes a time when its ability to handle complexity is exceeded. Once a program reaches a certain size, it becomes so complex that it is difficult to grasp as a totality. The purpose of C++ is to allow this barrier to be broken and to help the programmer comprehend and manage larger, more complex programs.
+
+8
+1.7 CHARACTERISTICS OF OOPS
+OOP offers several benefits to both the program designer and the user. The principal advantages are.
+1) Emphasis is on data rather than procedure.
+2) Programs are divided into what are known as objects.
+3) Data structures are designed such that they characterize the objects.
+4) Functions that operate on the data of an object are tied together in the data structure.
+5) Data is hidden and cannot be accessed by external functions.
+6) Objects may communicate with each other through functions.
+7) New data and functions can be easily added wherever necessary.
+8) Follows bottom up approach in program design.
+9) Through inheritance, we can eliminate redundant code and extend the use of existing classes
+10) We can build program from the standard working module that communicate with one another, rather than having to start writing the code from scratch. This leads to saving of development time and higher productivity.
+11) The principal of data hiding helps the programmer to build secure programs that cannot be invaded by code in other part of the program.
+12) It is possible to have multiple instance of an object to coexist without any interference
+13) It is easy to partition the work in a project, based on objects.
+14) Object oriented systems can be easily upgraded from small to large systems.
+15) Message passing techniques for communication between objects makes the interface description with external systems much simpler.
+16) Software complexity can be easily managed.
+1.8 C++ AND C
+ C is procedure oriented programming & c++ is object oriented programming.
+ C is top to bottom programming approach; c++ is bottom to top programming approach.
+    
+C has inheritance concept but c has not inheritance concept
+C is structured design, c++ is object oriented design
+C input/output is based on library and the processes are carried out by including functions.
+C++ I/O is made through console commands cin and cout.
+Undeclared functions in c++ are not allowed. The function has to have a prototype defined before the main before use in c++ although in c the functions can be declared at the point of use.
+Although it is possible to implement anything which C++ could implement in C, C++ aids to standardize a way in which objects are created and managed, whereas the C programmer who implements the same system has a lot of liberty on how to actually implement the internals, and style among programmers will vary a lot on the design choices made.
+9
+
+C++ PROGRAMMING BASICS
+Unit Structure
+2.1 Some of the important concepts in oops are 2.2 Basic Data Types in C++
+2.3 Variables in C++
+2.4 Operators in C++
+10
+2
+ 2.1 SOME OF THE IMPORTANT CONCEPTS IN OOPS ARE
+1) Objects
+2) Classes
+3) Data abstraction & Encapsulation. 4) Inheritance
+5) Polymorphism
+6) Dynamic binding.
+7) Message passing.
+2.1.1 Object:-
+i) Objects are the basic runtime entities in an objectoriented system.
+ii) They may represent a person, a place a bank account, a table of data or any item that the program has to handle.
+iii) Programming problem is analyzed in terms of objects and the nature of communication between them.
+iv) Objects take up space in the memory & have an associated address like structure in c.
+v) When a program executes, the object interacts by sending messages to one another.
+Ex. If there are two objects customer and account, then the customer object may send a message to the account object requesting for the bank balance. Thus each object contains data, and code to manipulate the data.
+ 
+11
+2.1.2 Classes
+i) The entire set of data and code of an object can be made a user defined data type with the help of a class. Objects are actually variable of the type class.
+ii) Once a class has been defined, we can create any number of objects belonging to that class. Thus a class is collection of objects of similar type.
+iii) Classes are user defined data types and behaves like the built in type of a programming language.
+iv) The syntax for defining class is class classname
+{ ---------------- ---------------- }
+2.1.3 Data abstraction and Encapsulation
+i) The wrapping up of data and functions into a single unit called class is known as encapsulation.
+ii) The data is not accessible to the outside world, and only those functions which are wrapped in the class can access it.
+iii) These functions provide the interface between the objects data and the program. This insulation of the data from direct access by the program is called data hiding or information hiding.
+iv) Abstraction refers to the act of representing essential features without including the background details or explanations.
+v) Classes use the concept of abstraction and are defined as a list of abstract attributes such as size, weight and coast, and functions to operate on these attributes.
+2.1.4 Inheritance
+i) Inheritance is the process by which object of one class acquire the properties of objects of another class.
+ii) In OOPs, the concept of inheritance provides the idea of reusability. This means that we can add additional features to an existing class without modifying it.
+iii) This is possible by deriving a new class from the existing one. The new class will have combined features of both the classes.
+2.1.5 Polymorphism
+i) Polymorphism is important oops concept. It means ability to take more than one form.
+
+12
+ii) In polymorphism an operation may show different behavior in different instances. The behavior depends upon the type of data used in the operation.
+For Ex- Operation of addition for two numbers, will generate a sum. If the operands are strings, then the operation would produce a third string by concatenation.
+iii) The process of making an operator to show different behavior in different instance is called as operator overloading. C++ support operator overloading.
+2.1.6 Dynamic Binding
+i) Binding refers to the linking of a procedure call to the code to be executed in response to the call.
+ii) Dynamic binding means that the code associated with a given procedure call is not known until the time of the call at run time.
+2.1.7 Message Passing
+i) OOPs consist of a set of
+
+ objects that communicate with each other.
+ii) Message passing involves following steps
+iii) Creating classes that define objects and their behavior iv) Creating objects from class definitions and
+v) Establishing communication among objects.
+vi) A message for an object is a request for execution of a procedure & therefore will invoke a function in the receiving object that generates the desired result.
+Message passing involves specifying the name of the object, the name of the function i.e. message and the information to be sent.
+Ex customer. balance(account no)
+object message information
+  
+13 A First Simple C++ Program
+# include<iostream.h> int main()
+{
+cout.Hello World.;
+return 0; }
+ C++ program is a collection of functions. Every C++ program must have a main() function.
+ The iostream file:-
+The header file iostream should be included at the beginning of all programs that uses one output statement.
+ Input / Output operator
+1. InputOperatorcin:-
+The identifier cin is a predefined object in c++ that corresponds to the standard input stream. Here this stream represents keyboard.
+Syntax:- cin>>variable;
+The operator >> is known as extraction or get from operator & assigns it to the variable on its right.
+2. Outputoperatorcout:-
+The identifier cout is predefined object that represents the standard output stream in c++. Here standard output stream represents the screen.
+Syntax:- cout<<string;
+The operator << is called the insertion or put to operator. It inserts the contents of the variable on its right to the object on its left.
+3. Returntypeofmain():-
+In C++, main returns an integer type value to the operating system. So return type for main() is explicitly specified as int. Therefore every main() in c++ should end with a return 0 statement.

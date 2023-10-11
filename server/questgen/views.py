@@ -35,8 +35,6 @@ def questionGenFromFile(request):
     questions = genquests(language, type_input, easy_num, med_num, hard_num)
 
     if type_input == 'tf':
-        print(questions)
-        print(extract_tfq(questions))
         return Response(extract_tfq(questions))
     return Response(extract_mcq(questions))
 
@@ -54,12 +52,12 @@ def questionGenFromText(request):
     hard_num = int(request.data["hard"])
     type_input = request.data["quest_type"]
 
-    easy_questions, medium_questions, hard_questions = genquests(language, type_input, easy_num, med_num, hard_num)
-    
-    response_data = {
-        "easy": easy_questions,
-        "medium": medium_questions,
-        "hard": hard_questions
-    }
-    
-    return Response(response_data)
+    QuestionModel.objects.create(text=context, easy=easy_num, medium=med_num, hard=hard_num, quest_type=type_input, language=language)
+
+    load_context(context=context)
+
+    questions = genquests(language, type_input, easy_num, med_num, hard_num)
+
+    if type_input == 'tf':
+        return Response(extract_tfq(questions))
+    return Response(extract_mcq(questions))
